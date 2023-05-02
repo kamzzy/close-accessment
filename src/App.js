@@ -1,24 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, useState } from 'react';
+import Items from './item';
+const  App = () => {
+  const [listeditems, setListeditems] = useState([]);
+  const [highlight, setHighlight] = useState(false);
+ 
+const highlightStyle = {
+  backgroundColor: 'lightblue',
+  color: 'darkblue',
+  padding: '6%',
+};
+  const highlightItem = (index) => {
+    const newItems = [...Items];
+     if(!listeditems.includes(newItems[index].name)){
+      newItems[index].name = newItems[index].name.toUpperCase()
+      setListeditems(current => [...current, newItems[index].name])
+      setHighlight(true);
+      console.log(listeditems)
+    }else {
+      setListeditems(listeditems.filter((item) => item !== newItems[index].name))
+      newItems[index].name = newItems[index].name.toLowerCase()
+      setHighlight(false);
+    }
+  };
+      
+  console.log(listeditems)
 
-function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      
+        {highlight ? <ul className="textList">
+        {listeditems.map((item) => (
+          <li key={item} >{item}</li>
+      ))}</ul> : null}
+    <ul className="List">
+      {Items.map((item,index) => (
+        
+        <li key={item.name} className={`List__item List__item--${item.color}`}
+          onClick={() => highlightItem(index)}
+          style={item.name === item.name.toUpperCase() ? highlightStyle : null }>
+          {item.name}
+        </li>
+      ))}
+    </ul>
+  </Fragment>
   );
 }
 
